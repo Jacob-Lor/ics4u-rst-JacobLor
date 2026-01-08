@@ -1,5 +1,5 @@
 
-public class Property {
+public abstract class Property {
 	
 	private String name;
 	private int fee;
@@ -30,7 +30,9 @@ public class Property {
 	public String getName() {
 		return name;
 	}
-	//As different properties have different fee structures, I left defining setting and getting fees to when I actually made them.
+	//Needed for all subclasses of the property, like Railroad, Building and Utility, yet implemented different. Hence, abstract class fits best.
+	public abstract void setFees();
+	public abstract void getFees();
 	
 
 }
