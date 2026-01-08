@@ -13,7 +13,7 @@ public class Player {
 		// TODO Auto-generated constructor stub
 	}
 	public void setCash(int amount) {
-		cash -= amount;
+		cash = amount;
 	}
 	public void setName(String name) {
 		userName = name;
@@ -27,5 +27,6 @@ public class Player {
 	public boolean addProperty(Property p) {
 		return properties.add(p);
 	}
+	//Need a mechanism for killing the player and selling all their assets.
 
 }
