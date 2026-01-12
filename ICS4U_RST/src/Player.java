@@ -9,8 +9,12 @@ public class Player {
 	private boolean isAlive;
 	private ArrayList<Property> properties = new ArrayList<Property>();
 	
-	public Player() {
-		// TODO Auto-generated constructor stub
+	public Player(String n, int c, int p, boolean a, boolean ip) {
+		cash = c;
+		position = p;
+		inPrison = ip;
+		userName = n;
+		isAlive = a;
 	}
 	public void setCash(int amount) {
 		cash = amount;
