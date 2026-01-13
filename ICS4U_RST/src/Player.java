@@ -19,9 +19,6 @@ public class Player {
 	public void setCash(int amount) {
 		cash = amount;
 	}
-	public void setName(String name) {
-		userName = name;
-	}
 	public String getName() {
 		return userName;
 	}

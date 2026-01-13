@@ -8,6 +8,7 @@ public abstract class Property {
 	protected int inherentValue;
 	protected boolean mortgaged;
 	protected boolean monopolized;
+	protected int monopolizedLevel;
 
 	public Property() {
 		// TODO Auto-generated constructor stub
@@ -30,8 +31,10 @@ public abstract class Property {
 	public String getName() {
 		return name;
 	}
+	public void updateMonopolizedLevel(int ml) {
+		monopolizedLevel = ml;
+	}
 	//Needed for all subclasses of the property, like Railroad, Building and Utility, yet implemented different. Hence, abstract class fits best.
-	public abstract void setFees();
 	public abstract int getFees();
 	
 

@@ -2,15 +2,19 @@ import java.util.ArrayList;
 
 public class Building extends Property{
 	public ArrayList<Integer> paymentPlan = new ArrayList<Integer>(); //To record prices number of hotels 
-
-	public Building(){
+	int housePrice;
+	int hotelPrice;
+	int numberOfHouses;
+	
+	public Building(String n, ArrayList<Integer> pP, int hP, int htP, int iV){
 		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void setFees() {
-		// TODO Auto-generated method stub
-		
+		name = n;
+		owner = null;
+		paymentPlan = pP;
+		housePrice = hP;
+		hotelPrice = htP;
+		inherentValue = iV;
+		mortgaged = false;
 	}
 
 	@Override
