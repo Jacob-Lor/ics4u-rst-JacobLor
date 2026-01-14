@@ -5,15 +5,18 @@ public class Building extends Property{
 	int housePrice;
 	int hotelPrice;
 	int numberOfHouses;
+	String colour;
 	
-	public Building(String n, ArrayList<Integer> pP, int hP, int htP, int iV){
+	public Building(String n, String c, ArrayList<Integer> pP, int hP, int htP, int mV, int iV){
 		// TODO Auto-generated constructor stub
 		name = n;
+		colour = c;
 		owner = null;
 		paymentPlan = pP;
 		housePrice = hP;
 		hotelPrice = htP;
 		inherentValue = iV;
+		mortgagedValue = mV;
 		mortgaged = false;
 	}
 

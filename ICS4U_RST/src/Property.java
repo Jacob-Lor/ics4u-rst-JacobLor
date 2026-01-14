@@ -6,6 +6,7 @@ public abstract class Property {
 	protected boolean purchased;
 	protected Player owner; //Changed from String to Player Object
 	protected int inherentValue;
+	protected int mortgagedValue;
 	protected boolean mortgaged;
 	protected boolean monopolized;
 	protected int monopolizedLevel;
