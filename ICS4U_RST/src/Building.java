@@ -19,6 +19,8 @@ public class Building extends Property{
 		mortgagedValue = mV;
 		mortgaged = false;
 	}
+	public String toString() {
+	}
 
 	@Override
 	public int getFees() {
