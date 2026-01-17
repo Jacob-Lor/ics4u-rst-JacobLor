@@ -10,7 +10,9 @@ import simpleIO.Console;
 public class Bank {
 	
 	private static ArrayList<Player> players = new ArrayList<Player>();
-	private static ArrayList<Building> buildings = new ArrayList<Building>(); 
+	private static Object[] tiles = new Object[40];
+	private static Player banker = new Player("banker", 0); //The only non player
+	public static int roll = 0;
 	
 	public static void main(String[] args) {
 		createProperties();
@@ -32,28 +34,37 @@ public class Bank {
             // Now create a BufferedReader object to wrap around numFile - this lets use
             // one line from the file at a time
             propertyReader = new BufferedReader(propertyFile);
+            String type;
             String name;
             String colour;
-            while (true) {
-            	name = propertyReader.readLine();
-            	if (name == null) {
-            		break;
+            for (int i = 0; i < 40; i++) {
+            	type = propertyReader.readLine();
+            	if ("building".equals(type)) {
+            		name = propertyReader.readLine();
+                    colour = propertyReader.readLine();
+                    Console.print(colour);
+                    ArrayList<Integer> rents = new ArrayList<Integer>();
+                    rents.add(Integer.parseInt(propertyReader.readLine())); //Base Rent
+                    rents.add(Integer.parseInt(propertyReader.readLine())); //Monopolized Rent
+                    rents.add(Integer.parseInt(propertyReader.readLine())); //One House Rent
+                    rents.add(Integer.parseInt(propertyReader.readLine())); //Two House Rent
+                    rents.add(Integer.parseInt(propertyReader.readLine())); //Three House Rent
+                    rents.add(Integer.parseInt(propertyReader.readLine())); //Four House Rent
+                    rents.add(Integer.parseInt(propertyReader.readLine())); //Hotel Rent
+                    int houseCost = Integer.parseInt(propertyReader.readLine());
+                    int hotelCost = Integer.parseInt(propertyReader.readLine());
+                    int inherentValue = Integer.parseInt(propertyReader.readLine());
+                    int mortgageValue = Integer.parseInt(propertyReader.readLine());
+                    tiles[i] = (new Building(name, colour, banker, rents, houseCost, hotelCost, inherentValue, mortgageValue));
             	}
-                colour = propertyReader.readLine();
-                Console.print(colour);
-                ArrayList<Integer> rents = new ArrayList<Integer>();
-                rents.add(Integer.parseInt(propertyReader.readLine())); //Base Rent
-                rents.add(Integer.parseInt(propertyReader.readLine())); //Monopolized Rent
-                rents.add(Integer.parseInt(propertyReader.readLine())); //One House Rent
-                rents.add(Integer.parseInt(propertyReader.readLine())); //Two House Rent
-                rents.add(Integer.parseInt(propertyReader.readLine())); //Three House Rent
-                rents.add(Integer.parseInt(propertyReader.readLine())); //Four House Rent
-                rents.add(Integer.parseInt(propertyReader.readLine())); //Hotel Rent
-                int houseCost = Integer.parseInt(propertyReader.readLine());
-                int hotelCost = Integer.parseInt(propertyReader.readLine());
-                int inherentValue = Integer.parseInt(propertyReader.readLine());
-                int mortgageValue = Integer.parseInt(propertyReader.readLine());
-                buildings.add(new Building(name, colour, rents, houseCost, hotelCost, inherentValue, mortgageValue));
+            	else if ("railroad".equals(type)) {
+            		name = propertyReader.readLine();
+            		tiles[i] = new Railroad(name);
+            	}
+            	else if ("utility".equals(type)) {
+            		name = propertyReader.readLine();
+            		tiles[i] = new Utility(name);
+            	}
             }
             Console.print("done");
             // Close the file
@@ -64,7 +75,6 @@ public class Bank {
         } 
 
         // Output array of buildings
-        Console.print("The average of the random numbers is: ");
     }
 }
 

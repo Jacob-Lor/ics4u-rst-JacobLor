@@ -8,13 +8,23 @@ public class Player {
 	private String userName;
 	private boolean isAlive;
 	private ArrayList<Property> properties = new ArrayList<Property>();
+	private int id;
 	
-	public Player(String n, int c, int p, boolean a, boolean ip) {
+	public Player(String n, int i) {
+		userName = n;
+		id = i;
+	}
+	
+	public Player(String n, int i, int c, int p, boolean a, boolean ip) {
 		cash = c;
 		position = p;
 		inPrison = ip;
 		userName = n;
 		isAlive = a;
+		id = i;
+	}
+	public String toString() {
+		return userName + "_" + Integer.toString(id);
 	}
 	public void setCash(int amount) {
 		cash = amount;

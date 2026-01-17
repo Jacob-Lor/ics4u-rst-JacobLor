@@ -1,3 +1,5 @@
+blank
+building
 Mediterranean Avenue
 Brown
 2
@@ -11,6 +13,8 @@ Brown
 50
 60
 30
+blank
+building
 Baltic Avenue
 Brown
 4
@@ -24,6 +28,10 @@ Brown
 50
 60
 30
+blank
+railroad
+Reading Railroad
+building
 Oriental Avenue
 Light Blue
 6
@@ -37,6 +45,8 @@ Light Blue
 50
 100
 50
+blank
+building
 Vermont Avenue
 Light Blue
 6
@@ -50,6 +60,7 @@ Light Blue
 50
 100
 50
+building
 Connecticut Avenue
 Light Blue
 8
@@ -63,6 +74,8 @@ Light Blue
 50
 120
 60
+blank
+building
 St. Charles Place
 Pink
 10
@@ -76,6 +89,9 @@ Pink
 100
 140
 70
+utility
+Electric Company
+building
 States Avenue
 Pink
 10
@@ -89,6 +105,7 @@ Pink
 100
 140
 70
+building
 Virginia Avenue
 Pink
 12
@@ -102,6 +119,9 @@ Pink
 100
 160
 80
+railroad
+Pennsylvania Railroad
+building
 St. James Place
 Orange
 14
@@ -115,6 +135,8 @@ Orange
 100
 180
 90
+blank
+building
 Tennessee Avenue
 Orange
 14
@@ -128,6 +150,7 @@ Orange
 100
 180
 90
+building
 New York Avenue
 Orange
 16
@@ -141,6 +164,8 @@ Orange
 100
 200
 100
+blank
+building
 Kentucky Avenue
 Red
 18
@@ -154,6 +179,8 @@ Red
 150
 220
 110
+blank
+building
 Indiana Avenue
 Red
 18
@@ -167,6 +194,7 @@ Red
 150
 220
 110
+building
 Illinois Avenue
 Red
 20
@@ -180,6 +208,9 @@ Red
 150
 240
 120
+railroad
+B. & O. Railroad
+building
 Atlantic Avenue
 Yellow
 22
@@ -193,6 +224,7 @@ Yellow
 150
 260
 130
+building
 Ventnor Avenue
 Yellow
 22
@@ -206,6 +238,9 @@ Yellow
 150
 260
 130
+utility
+Water Works
+building
 Marvin Gardens
 Yellow
 24
@@ -219,6 +254,8 @@ Yellow
 150
 280
 140
+blank
+building
 Pacific Avenue
 Green
 26
@@ -232,6 +269,7 @@ Green
 200
 300
 150
+building
 North Carolina Avenue
 Green
 26
@@ -245,6 +283,8 @@ Green
 200
 300
 150
+blank
+building
 Pennsylvania Avenue
 Green
 28
@@ -258,6 +298,10 @@ Green
 200
 320
 160
+railroad
+Short Line
+blank
+building
 Park Place
 Dark Blue
 35
@@ -271,6 +315,8 @@ Dark Blue
 200
 350
 175
+blank
+building
 Boardwalk
 Dark Blue
 50
@@ -284,3 +330,4 @@ Dark Blue
 200
 400
 200
+

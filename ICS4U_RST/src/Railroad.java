@@ -1,13 +1,15 @@
 
-public class Railroad {
+public class Railroad extends Property{
 
-	public Railroad() {
+	public Railroad(String n) {
 		// TODO Auto-generated constructor stub
+		name = n;
 	}
 
-	public static void main(String[] args) {
+	@Override
+	public int getFees() {
 		// TODO Auto-generated method stub
-
+		return (25 * 2^monopolizedLevel);
 	}
 
 }
