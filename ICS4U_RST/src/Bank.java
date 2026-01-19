@@ -16,9 +16,6 @@ public class Bank {
 	
 	public static void main(String[] args) {
 		createProperties();
-	}
-	
-	private void addPlayer() {
 		
 	}
 	private static void createProperties() {
@@ -76,6 +73,21 @@ public class Bank {
 
         // Output array of buildings
     }
+	public static int rollDie() {
+		int a = randomNumber(1, 6);
+		int b = randomNumber(1, 6);
+		return a + b;
+	}
+	public static int randomNumber(int a, int b) {
+	    int highNum = Math.max(a, b);
+	    int lowNum = Math.min(a, b);
+	    int range = highNum - lowNum + 1;
+	    return (int) (Math.random() * range) + lowNum;
+	}
+	public static createPlayers() {
+		//Names
+		
+	}
 }
 
 
