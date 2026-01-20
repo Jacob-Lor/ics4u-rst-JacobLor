@@ -1,4 +1,10 @@
-
+/**
+ * @author Jacob Lor
+ * Date: 2025-09-24
+ * ICS4U
+ * Utility.java
+ * This utility class lays out the fee structure of a railroad card.
+ */
 public class Utility extends Property{
 
 	public Utility(String n) {

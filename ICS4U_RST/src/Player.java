@@ -1,3 +1,11 @@
+/**
+ * @author Jacob Lor
+ * Date: 2025-09-24
+ * ICS4U
+ * Player.java
+ * This player class is responsible for handling the information of the player.
+ */
+
 import java.util.ArrayList;
 
 public class Player {
@@ -9,20 +17,17 @@ public class Player {
 	private boolean isAlive;
 	private ArrayList<Property> properties = new ArrayList<Property>();
 	private int id;
+	private static int nextId = 1; // ensures id is never 0 -- the banker!
 	
-	public Player(String n, int i) {
-		userName = n;
-		id = i;
+	public Player(String n, int startingCash) {
+	    userName = n;
+	    cash = startingCash;
+	    id = nextId++;
+	    position = 0;
+	    inPrison = false;
+	    isAlive = true;
 	}
-	
-	public Player(String n, int i, int c, int p, boolean a, boolean ip) {
-		cash = c;
-		position = p;
-		inPrison = ip;
-		userName = n;
-		isAlive = a;
-		id = i;
-	}
+
 	public String toString() {
 		return userName + "_" + Integer.toString(id);
 	}
@@ -38,6 +43,19 @@ public class Player {
 	public boolean addProperty(Property p) {
 		return properties.add(p);
 	}
+	public int getId() {
+	    return id;
+	}
+	public int getCash() {
+	    return cash;
+	}
+	public int getPosition() {
+		return position;
+	}
+	public void setPosition(int p) {
+		position = p;
+	}
+
 	//Need a mechanism for killing the player and selling all their assets.
 
 }

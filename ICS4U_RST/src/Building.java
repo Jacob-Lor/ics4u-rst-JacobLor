@@ -1,3 +1,10 @@
+/**
+ * @author Jacob Lor
+ * Date: 2025-09-24
+ * ICS4U
+ * Building.java
+ * This building class is responsible for handling the information for the various building style properties of monopoly.
+ */
 import java.util.ArrayList;
 
 public class Building extends Property{

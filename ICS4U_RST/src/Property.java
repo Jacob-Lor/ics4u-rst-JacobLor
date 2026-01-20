@@ -1,4 +1,10 @@
-
+/**
+ * @author Jacob Lor
+ * Date: 2025-09-24
+ * ICS4U
+ * Property.java
+ * This property class lays out the typical datafields and methods associated with any property in monopoly.
+ */
 public abstract class Property {
 	
 	protected String name;
