@@ -7,6 +7,8 @@
  */
 
 import java.util.ArrayList;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 public class Player {
 	
@@ -19,13 +21,25 @@ public class Player {
 	private int id;
 	private static int nextId = 1; // ensures id is never 0 -- the banker!
 	
-	public Player(String n, int startingCash) {
+	private Circle token;
+	
+	//only for the bank
+	public Player(String n, int i) {
+		userName = n; 
+		id = i; 
+	}
+	
+	public Player(String n, int startingCash, Color color) {
 	    userName = n;
 	    cash = startingCash;
 	    id = nextId++;
 	    position = 0;
 	    inPrison = false;
 	    isAlive = true;
+
+	    token = new Circle(10);
+	    token.setFill(color);
+	    token.setStroke(Color.BLACK);
 	}
 
 	public String toString() {
@@ -54,6 +68,9 @@ public class Player {
 	}
 	public void setPosition(int p) {
 		position = p;
+	}
+	public Circle getToken() {
+		return token;
 	}
 
 	//Need a mechanism for killing the player and selling all their assets.
