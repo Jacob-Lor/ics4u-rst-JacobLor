@@ -24,7 +24,7 @@ public class Building extends Property {
 	 * @return This method does not return anything.
 	 */
 	public Building(String n, String c, Player o, ArrayList<Integer> rs,
-	                int hP, int htP, int mV, int iV) {
+	                int hP, int htP, int iV, int mV) {
 
 		name = n;
 		colour = c;

@@ -14,8 +14,9 @@ public class Utility extends Property {
 	 * This method expects a <code>String<code> n for the name of the utility.
 	 * @return This method does not return anything.
 	 */
-	public Utility(String n) {
+	public Utility(String n, Player o) {
 		name = n;
+		owner = o;
 		purchased = false;
 		monopolized = false;
 		inherentValue = 150;

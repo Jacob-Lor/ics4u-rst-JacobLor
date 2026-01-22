@@ -14,8 +14,9 @@ public class Railroad extends Property {
 	 * This method expects a <code>String<code> n representing the name of the railroad.
 	 * @return This method does not return anything.
 	 */
-	public Railroad(String n) {
+	public Railroad(String n, Player o) {
 		name = n;
+		owner = o;
 		fee = 25; // Base rent for one railroad
 		purchased = false;
 		inherentValue = 200;

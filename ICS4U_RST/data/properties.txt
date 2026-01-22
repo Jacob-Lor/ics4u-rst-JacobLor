@@ -30,7 +30,7 @@ blank
 railroad
 Reading Railroad
 building
-__Oriental__ Avenue
+Oriental Avenue
 Light Blue
 6
 30
@@ -71,7 +71,7 @@ Light Blue
 60
 blank
 building
-__St__. __Charles__ Place
+St. Charles Place
 Pink
 10
 50
@@ -114,7 +114,7 @@ Pink
 railroad
 Pennsylvania Railroad
 building
-__St__. James Place
+St. James Place
 Orange
 14
 70
@@ -210,7 +210,7 @@ Yellow
 260
 130
 building
-__Ventnor__ Avenue
+Ventnor Avenue
 Yellow
 22
 110
@@ -225,7 +225,7 @@ Yellow
 utility
 Water Works
 building
-__Marvin__ Gardens
+Marvin Gardens
 Yellow
 24
 120
@@ -296,7 +296,7 @@ Dark Blue
 175
 blank
 building
-__Boardwalk__
+Boardwalk
 Dark Blue
 50
 200
