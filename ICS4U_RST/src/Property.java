@@ -111,4 +111,11 @@ public abstract class Property {
 	 */
 	//Needed for all subclasses of the property, like Railroad, Building and Utility, yet implemented different. 
 	public abstract int getFees();
+	
+	public void setOwner(Player o) {
+		owner = o;
+	}
+	public void setPurchased(boolean b) {
+		purchased = b;
+	}
 }

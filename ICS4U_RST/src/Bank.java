@@ -347,24 +347,34 @@ public class Bank extends Application {
      * @return This method does not return anything
      */
     private void endTurn() {
-    	printLeaderboard(); // Display current standings to console
-        
-        // Advance to the next player (wraps around to first player after last)
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        
-        // Update UI elements for the new active player
-        lblTurnInfo.setText("Turn: " + players.get(currentPlayerIndex).getName());
-        lblRollResult.setText("Roll the dice!"); // Reset roll prompt
-        
-        // Clear property information panel for new turn
-        vbxPropertyInfoRef.getChildren().clear();
-        vbxPropertyInfoRef.getChildren().add(new Label("Current Tile Info: Wait for roll"));
-        
-        updatePlayerStats(); // Update displayed player statistics
-        
-        // Reset button states for new turn
-        btnRoll.setDisable(false);  // Enable dice rolling
-        btnEndTurn.setDisable(true); // Disable end turn until dice are rolled
+    	//When end turn is clicked, the program should check if the player is bankrupt and whether they need to pay off their debts before ending the turn.
+        Player currentPlayer = players.get(currentPlayerIndex); // Get the active player
+        //If the player is in debt, the program must make them pay!
+        if (currentPlayer.getCash() < 0) {
+        	bankruptcyUltimatum();
+        }
+        //Else, if this is not a problem, let the player end their turn.
+        else {
+
+        	printLeaderboard(); // Display current standings to console
+            
+            // Advance to the next player (wraps around to first player after last)
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+            
+            // Update UI elements for the new active player
+            lblTurnInfo.setText("Turn: " + players.get(currentPlayerIndex).getName());
+            lblRollResult.setText("Roll the dice!"); // Reset roll prompt
+            
+            // Clear property information panel for new turn
+            vbxPropertyInfoRef.getChildren().clear();
+            vbxPropertyInfoRef.getChildren().add(new Label("Current Tile Info: Wait for roll"));
+            
+            updatePlayerStats(); // Update displayed player statistics
+            
+            // Reset button states for new turn
+            btnRoll.setDisable(false);  // Enable dice rolling
+            btnEndTurn.setDisable(true); // Disable end turn until dice are rolled
+        }
     }
 
     /**
@@ -414,6 +424,12 @@ public class Bank extends Application {
                 vbxPropertyInfoRef.getChildren().add(new Label("Action: Resting..."));
             }
         }
+        //Check after landing on a property if a payer has gone into debt!
+        if (player.getCash() < 0) {
+        	//Initiate the bankruptcy ultimatum process.
+        	bankruptcyUltimatum();
+        }
+        updatePlayerStats(); // Refresh player cash displays
     }
     
     /**
@@ -565,7 +581,6 @@ public class Bank extends Application {
                      "You need $" + property.getInherentValue() + " but only have $" + player.getCash());
         }
     }
-
     /**
      * This method handles rent payment between players.
      * @param payer The player who must pay rent
@@ -574,77 +589,31 @@ public class Bank extends Application {
      * @return This method does not return anything
      */
     private void chargeRent(Player payer, Player owner, int amount) {
-        // Check if payer has sufficient cash for rent
-        if (payer.getCash() >= amount) {
-            // Transfer rent money between players
-            payer.setCash(payer.getCash() - amount);
-            owner.setCash(owner.getCash() + amount);
+        // Transfer rent money between players
+        payer.setCash(payer.getCash() - amount);
+        owner.setCash(owner.getCash() + amount);
             
-            // Notify players of the rent transaction
-            showAlert(Alert.AlertType.INFORMATION, "Rent Paid", 
-                     payer.getName() + " paid $" + amount + " to " + owner.getName());
-        } else {
-            // Handle case where player cannot afford rent
-            handleInsufficientFunds(payer, owner, amount);
-        }
-        updatePlayerStats(); // Refresh player cash displays
+        // Notify players of the rent transaction
+        showAlert(Alert.AlertType.INFORMATION, "Rent Paid", 
+            payer.getName() + " paid $" + amount + " to " + owner.getName());
+        //Check if player is now bankrupt
     }
-
-    /**
-     * This method handles situations where a player cannot pay required fees.
-     * @param payer The player who cannot pay the required amount
-     * @param creditor The player or entity owed money
-     * @param amountOwed The total amount that must be paid
-     * @return This method does not return anything
-     */
-    private void handleInsufficientFunds(Player payer, Player creditor, int amountOwed) {
-        // Display insufficient funds warning with current financial status
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Insufficient Funds");
-        alert.setHeaderText(payer.getName() + " cannot pay $" + amountOwed);
-        alert.setContentText("Cash: $" + payer.getCash() + "\nYou must mortgage or sell properties using 'My Properties'.");
-        alert.showAndWait();
-        
-        // Open property management window to allow fundraising
-        showPlayerProperties(payer);
-        
-        // Check if player raised sufficient funds after property management
-        if (payer.getCash() >= amountOwed) {
-            // Complete the payment transaction
-            payer.setCash(payer.getCash() - amountOwed);
-            creditor.setCash(creditor.getCash() + amountOwed);
-            showAlert(Alert.AlertType.INFORMATION, "Debt Settled", "Payment complete.");
-        } else {
-            // Player still cannot pay - offer bankruptcy option
-            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-            confirm.setTitle("Bankruptcy");
-            confirm.setContentText("Still can't pay. Declare bankruptcy?");
-            Optional<ButtonType> res = confirm.showAndWait();
-            if(res.isPresent() && res.get() == ButtonType.OK) {
-                declareBankruptcy(payer, creditor); // Handle bankruptcy proceedings
-            }
-        }
-    }
-
     /**
      * This method handles player bankruptcy by transferring all assets to the creditor.
      * @param bankrupt The player declaring bankruptcy
-     * @param creditor The player receiving the bankrupt player's assets
      * @return This method does not return anything
      */
-    private void declareBankruptcy(Player bankrupt, Player creditor) {
+    private void declareBankruptcy(Player bankrupt) {
         bankrupt.setIsAlive(false); // Mark player as eliminated
         
-        // Transfer all properties to the creditor
+        // Sell all properties to the bank
         for (Property p : new ArrayList<>(bankrupt.getProperties())) {
+        	//Reset Property to Default & Remove Houses
+        	
+        	resetProperty(p);
             bankrupt.removeProperty(p); // Remove from bankrupt player
-            p.owner = creditor;         // Transfer ownership
-            creditor.addProperty(p);    // Add to creditor's portfolio
+            p.owner = banker;         // Transfer ownership to the bank
         }
-        
-        // Transfer remaining cash to creditor
-        creditor.setCash(creditor.getCash() + bankrupt.getCash());
-        bankrupt.setCash(0); // Zero out bankrupt player's cash
         
         // Notify of bankruptcy
         showAlert(Alert.AlertType.WARNING, "Bankruptcy", bankrupt.getName() + " is bankrupt!");
@@ -1257,6 +1226,53 @@ public class Bank extends Application {
          checkMonopoly(p, player);
      }
  }
+ private void bankruptcyUltimatum() {
+     Player currentPlayer = players.get(currentPlayerIndex); // Get the active player
+     
+     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+     alert.setTitle("Debt");
+     alert.setHeaderText(currentPlayer.getName() + ", you are in debt!");
+     alert.setContentText(
+         "Cash: $" + currentPlayer.getCash() +
+         "\n\nChoose an option:\n" +
+         "• Continue playing and raise cash\n" +
+         "• Declare bankruptcy"
+     );
+
+     ButtonType btnContinue = new ButtonType("Raise Cash");
+     ButtonType btnBankrupt = new ButtonType("Bankrupt");
+
+     alert.getButtonTypes().setAll(btnContinue, btnBankrupt);
+
+     Optional<ButtonType> result = alert.showAndWait();
+
+     if (result.isPresent() && result.get() == btnBankrupt) {
+         declareBankruptcy(currentPlayer);
+     } else {
+         showPlayerProperties(currentPlayer); // force asset liquidation UI
+     }
+ }
+ 
+ private void resetProperty(Property property) {
+
+	    // Reset ownership
+	    property.setOwner(banker);
+	    property.setPurchased(false);
+
+	    // Reset mortgage state
+	    property.setMortgaged(false);
+
+	    // Reset monopoly / rent multipliers
+	    property.setMonopolized(false);
+
+	    // Reset buildings if applicable
+	    if (property instanceof Building) {
+	        Building b = (Building) property;
+	        b.resetHouses();
+	    }
+	}
+
+ 
 
 }
 

@@ -146,5 +146,8 @@ public class Building extends Property {
 	    // Returns full house value (not half) as requested
 	    return housePrice;
 	}
+	public void resetHouses() {
+		numberOfHouses = 0;
+	}
 }
 
