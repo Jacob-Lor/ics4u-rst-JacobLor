@@ -649,8 +649,19 @@ public class Bank extends Application {
         // Notify of bankruptcy
         showAlert(Alert.AlertType.WARNING, "Bankruptcy", bankrupt.getName() + " is bankrupt!");
         
-        // Remove bankrupt player from active game
+        // Identify the index of the player being removed
+        int removedIndex = players.indexOf(bankrupt);
+
+        // Remove the player
         players.remove(bankrupt);
+
+        //Adjust the current index so it doesn't point out of bounds
+        if (players.size() > 0) {
+            // If the removed player was at or before the current turn index, shift index back
+            if (removedIndex <= currentPlayerIndex) {
+                currentPlayerIndex = Math.max(0, currentPlayerIndex - 1);
+            }
+        }
         
         // Check if only one player remains (game over condition)
         if (players.size() == 1) {
@@ -690,11 +701,16 @@ public class Bank extends Application {
         // Handle railroad properties
         else if (property instanceof Railroad) {
             int railroadCount = 0;
-            // Count total railroads owned by player
+            //Count number of properties owned by current player
             for (Property p : player.getProperties()) {
                 if (p instanceof Railroad) {
                     railroadCount++;
-                    // Update monopoly level based on number of railroads owned
+                }
+            }
+            // Count total railroads owned by player
+            for (Property p : player.getProperties()) {
+                if (p instanceof Railroad) {
+                    // Update monopoly level using the FINAL count for everyone
                     ((Railroad)p).updateMonopolizedLevel(railroadCount - 1);
                 }
             }
@@ -726,7 +742,7 @@ public class Bank extends Application {
      */
     private int getRequiredCountForMonopoly(String color) {
         // Brown and Dark Blue color groups only have 2 properties each
-        if (color.equalsIgnoreCase("brown") || color.equalsIgnoreCase("darkblue")) {
+        if (color.equalsIgnoreCase("Brown") || color.equalsIgnoreCase("Dark Blue")) {
         	return 2;
         } 
         return 3; // All other color groups have 3 properties
@@ -890,7 +906,6 @@ public class Bank extends Application {
      * @return This method does not return anything
      */
     private void showPlayerProperties(Player player) {
-    	
         // Create new window for property management
         Stage propStage = new Stage();
         propStage.setTitle("Manage Properties - " + player.getName());
@@ -905,30 +920,24 @@ public class Bank extends Application {
         Label lblCash = new Label("Your Cash: $" + player.getCash());
         lblCash.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: green;");
         header.getChildren().add(lblCash);
-        
-        // Add header and separator to main container
         mainBox.getChildren().addAll(header, new Separator());
-
+        
         // Container for scrollable property list
         VBox scrollContent = new VBox(10);
-
+        
         // Check if player owns any properties
         if (player.getProperties().isEmpty()) {
             scrollContent.getChildren().add(new Label("You don't own any properties yet."));
         } else {
             // Create a card for each property owned by the player
             for (Property p : new ArrayList<>(player.getProperties())) {
-                VBox card = new VBox(5); // Container for individual property card
+                VBox card = new VBox(5);
                 
                 // Determine border color based on property type
-                String borderColor = "#cccccc"; // Default gray border
-                if (p instanceof Building) {
-                    borderColor = getPropertyColorHex(((Building)p).getColour()); // Use property color
-                } else if (p instanceof Railroad) {
-                    borderColor = "#000000"; // Black for railroads
-                } else if (p instanceof Utility) {
-                    borderColor = "#708090"; // Slate gray for utilities
-                }
+                String borderColor = "#cccccc";
+                if (p instanceof Building) borderColor = getPropertyColorHex(((Building)p).getColour());
+                else if (p instanceof Railroad) borderColor = "#000000";
+                else if (p instanceof Utility) borderColor = "#708090";
                 
                 // Apply styling to property card
                 card.setStyle("-fx-border-color: " + borderColor + "; -fx-border-width: 3; -fx-border-radius: 5; -fx-padding: 8; -fx-background-color: white;");
@@ -946,98 +955,122 @@ public class Bank extends Application {
                     cardHeader.getChildren().add(m);
                 }
                 card.getChildren().add(cardHeader);
-
+                
                 // Action buttons container
                 HBox actions = new HBox(10);
                 actions.setAlignment(Pos.CENTER_LEFT);
-
+                
                 // Mortgage/Unmortgage button with dynamic text and cost
                 Button btnMort = new Button(p.mortgaged ? "Unmortgage ($" + (int)(p.mortgagedValue * 1.1) + ")" : "Mortgage (+$" + p.mortgagedValue + ")");
-                btnMort.setOnAction(e -> {
-                    handleMortgageToggle(p, player, propStage); // Handle mortgage state change
-                });
+                btnMort.setOnAction(e -> handleMortgageToggle(p, player, propStage));
                 
                 // Sell property button
-                Button btnSell = new Button("Sell (+$" + p.mortgagedValue + ")");
+                Button btnSell = new Button("Sell Prop (+$" + p.mortgagedValue + ")");
                 btnSell.setStyle("-fx-text-fill: red;");
-                btnSell.setOnAction(e -> {
-                    handleSellProperty(p, player, propStage); // Handle property sale
-                });
+                btnSell.setOnAction(e -> handleSellProperty(p, player, propStage));
                 
                 // Add basic action buttons to the container
                 actions.getChildren().addAll(btnMort, btnSell);
-
+                
                 // Special handling for building properties
                 if (p instanceof Building) {
                     Building b = (Building) p;
                     Label info = new Label("Houses: " + b.getHouses());
                     
                     String rentInfo = "Current Rent: $" + b.getFees();
-                    if (b.getHouses() < 5) {
-                        rentInfo += " | Next Level: $" + b.rents.get(Math.min(5, b.getHouses() + 1));
-                    }
+                    if (b.getHouses() < 5) rentInfo += " | Next Level: $" + b.rents.get(Math.min(5, b.getHouses() + 1));
                     Label lblRentDetails = new Label(rentInfo);
                     lblRentDetails.setStyle("-fx-font-size: 10px; -fx-text-fill: grey;");
 
                     card.getChildren().addAll(info, lblRentDetails);
 
+                    // house management buttons
                     if (b.monopolized && !p.mortgaged) {
+                        
+                        //buy house button
                         String buildBtnText = (b.getHouses() == 4) ? "Buy Hotel (-$" + b.housePrice + ")" : "Build House (-$" + b.housePrice + ")";
                         Button btnBuild = new Button(buildBtnText);
                         btnBuild.setStyle("-fx-background-color: #eeffee; -fx-text-fill: green; -fx-border-color: green;");
                         
+                        // Disable build if too poor OR already maxed
                         if (!b.canBuildHouse() || player.getCash() < b.housePrice) {
                             btnBuild.setDisable(true);
                         }
+                        // Regulation check: Cannot build unevenly 
                         
                         btnBuild.setOnAction(e -> {
                             player.setCash(player.getCash() - b.housePrice);
                             b.addHouse();
                             propStage.close();
-                            showPlayerProperties(player);
+                            javafx.application.Platform.runLater(() -> showPlayerProperties(player));
                             updatePlayerStats();
                         });
+                        
+                        // Sell house button
+                        if (b.getHouses() > 0) {
+                            Button btnSellHouse = new Button("Sell House (+$" + (b.housePrice / 2) + ")");
+                            btnSellHouse.setStyle("-fx-background-color: #ffeeee; -fx-text-fill: darkred; -fx-border-color: darkred;");
+                            
+                            // Can only sell if this property has the most houses in the group
+                            boolean canSellHouse = true;
+                            for(Property other : player.getProperties()) {
+                                if(other instanceof Building && other != b && ((Building)other).colour.equals(b.colour)) {
+                                    if(((Building)other).getHouses() > b.getHouses()) {
+                                        canSellHouse = false; // Cannot sell, must break down evenly
+                                    }
+                                }
+                            }
+                            //If the seller has met the needed conditions, they are allowed to sell the house.
+                            if(!canSellHouse) {
+                                btnSellHouse.setDisable(true);
+                                btnSellHouse.setTooltip(new javafx.scene.control.Tooltip("Must sell houses evenly from highest developed properties first."));
+                            }
+                            //On click refund the player half of the houses value
+                            btnSellHouse.setOnAction(e -> {
+                                b.removeHouse();
+                                player.setCash(player.getCash() + (b.housePrice / 2)); // Refund 50%
+                                propStage.close();
+                                javafx.application.Platform.runLater(() -> showPlayerProperties(player));
+                                updatePlayerStats();
+                            });
+                            actions.getChildren().add(btnSellHouse);
+                        }
+                        
                         actions.getChildren().add(btnBuild);
+                      //Informs the user they need a monopoly to build
                     } else if (!b.monopolized) {
                         Label lblMono = new Label("(Need Monopoly to build)");
                         lblMono.setStyle("-fx-font-size: 10; -fx-font-style: italic;");
                         actions.getChildren().add(lblMono);
                     }
-                }
-                // Add information for Railroads
-                else if (p instanceof Railroad) {
+                    // Add information for Railroads
+                } else if (p instanceof Railroad) {
                     Railroad r = (Railroad) p;
                     Label info = new Label("Railroads Owned: " + (r.monopolizedLevel + 1));
                     Label rentInfo = new Label("Current Rent: $" + r.getFees());
                     rentInfo.setStyle("-fx-font-size: 10px; -fx-text-fill: grey;");
                     card.getChildren().addAll(info, rentInfo);
-                }
-                // Add information for Utilities
-                else if (p instanceof Utility) {
+                    // Add information for Utilities
+                } else if (p instanceof Utility) {
                     Utility u = (Utility) p;
                     Label info = new Label("Monopoly: " + (u.monopolized ? "Yes" : "No"));
                     Label rentInfo = new Label("Rent: " + (u.monopolized ? "10x dice roll" : "4x dice roll"));
                     rentInfo.setStyle("-fx-font-size: 10px; -fx-text-fill: grey;");
                     card.getChildren().addAll(info, rentInfo);
                 }
-
                 // Add action buttons to all property cards
                 card.getChildren().add(actions);
                 scrollContent.getChildren().add(card);
             }
         }
-
         // Create scrollable container for property list
         ScrollPane sp = new ScrollPane(scrollContent);
         sp.setFitToWidth(true);
         mainBox.getChildren().add(sp);
-
         // Display the property management window
-        Scene scene = new Scene(mainBox, 500, 600);
+        Scene scene = new Scene(mainBox, 550, 600); // Widened slightly for new buttons
         propStage.setScene(scene);
         propStage.show();
-            
-        
     }
     
     /**
@@ -1096,7 +1129,7 @@ public class Bank extends Application {
         // Update displays and reopen property window
         updatePlayerStats();
         window.close();
-        // ADD A SMALL DELAY before reopening to ensure the window is fully closed
+        // Adds a small delay before reopening to ensure the window is fully closed
         javafx.application.Platform.runLater(() -> showPlayerProperties(player));
     }
 
@@ -1108,36 +1141,49 @@ public class Bank extends Application {
      * @return This method does not return anything
      */
     private void handleSellProperty(Property p, Player player, Stage window) {
-        // Confirm property sale with user
+        // Check for houses on the entire color group
+        if (p instanceof Building) {
+            String colorGroup = ((Building) p).colour; // Get color of property being sold
+            
+            // Scan all properties owned by the player
+            for (Property prop : player.getProperties()) {
+                if (prop instanceof Building) {
+                    Building b = (Building) prop;
+                    // If it's the same color and has houses...
+                    if (b.colour.equals(colorGroup) && b.getHouses() > 0) {
+                        // STOP the sale and warn the player
+                        showAlert(Alert.AlertType.WARNING, "Cannot Sell Property", 
+                            "Regulation: You must sell all houses on the " + colorGroup + 
+                            " color group before you can sell this property.");
+                        return; // Exit method immediately
+                    }
+                }
+            }
+        }
+
+        // Proceed with Sale 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setContentText("Sell " + p.getName() + " to Bank for $" + p.mortgagedValue + "?");
         Optional<ButtonType> res = confirm.showAndWait();
         
         if (res.isPresent() && res.get() == ButtonType.OK) {
-            // Remove all houses from building properties before sale
-            if (p instanceof Building) {
-                Building b = (Building) p;
-                while(b.getHouses() > 0) {
-                    b.removeHouse();
-                }
-            }
-            
-            // Transfer property sale proceeds to player
+            // Transfer cash
             player.setCash(player.getCash() + p.mortgagedValue);
             
-            // Remove property from player's ownership
+            // Remove ownership
             player.removeProperty(p);
-            
-            // Reset property to unowned state
             p.purchased = false;
             p.owner = banker;
             p.setMortgaged(false);
             p.setMonopolized(false);
             
-            // Update displays and reopen property window
+            // Recalculate monopolies for remaining properties
+            recalculateMonopolies(player);
+            
+            // Update UI
             updatePlayerStats();
             window.close();
-            // ADD A SMALL DELAY before reopening to ensure the window is fully closed
+            //This is a small delay to prevent instances from being instantiated twice.
             javafx.application.Platform.runLater(() -> showPlayerProperties(player));
         }
     }
@@ -1187,12 +1233,29 @@ public class Bank extends Application {
 
      // Display the current leader information
      if (leader != null) {
-         Console.print("CURRENT LEADER: " + leader.getName() + " with $");
-         Console.print(highestAssets);
-         Console.print(" in total assets\n");
+         Console.print("CURRENT LEADER: " + leader.getName() + " with $ " + highestAssets);
      }
 
      Console.print("=======================\n\n"); // Print footer
+ }
+ /**
+  * Scans all properties owned by the player and updates their monopoly status.
+  * @param This method expects a player object.
+  * 
+  */
+ private void recalculateMonopolies(Player player) {
+     // Reset all monopoly flags first
+     for (Property p : player.getProperties()) {
+         p.setMonopolized(false);
+         if (p instanceof Railroad) {
+             ((Railroad) p).updateMonopolizedLevel(0); // Reset to base level
+         }
+     }
+     // Re-evaluate monopolies based on current inventory
+     // It will calculate totals based on what is CURRENTLY in the list.
+     for (Property p : player.getProperties()) {
+         checkMonopoly(p, player);
+     }
  }
 
 }
