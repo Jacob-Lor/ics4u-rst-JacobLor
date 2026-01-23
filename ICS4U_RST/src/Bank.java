@@ -24,6 +24,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -130,25 +131,87 @@ public class Bank extends Application {
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 4, 2)
         );
 
-        // Button to start the game with selected number of players
-        Button btnStart = new Button("Start Game");
+        // Button to proceed to name selection
+        Button btnNext = new Button("Next: Enter Names");
 
         // Layout container for setup screen
-        VBox root = new VBox(15, lblPlayerSelector, spnPlayer, btnStart);
+        VBox root = new VBox(15, lblPlayerSelector, spnPlayer, btnNext);
         root.setPadding(new Insets(20));
         root.setAlignment(Pos.CENTER);
         
-        // Event handler for start game button
-        btnStart.setOnAction(e -> {
+        // Event handler for next button - opens name selection screen
+        btnNext.setOnAction(e -> {
             int numPlayers = spnPlayer.getValue(); // Get selected number of players
-            createPlayers(numPlayers); // Initialize player objects
-            stage.close(); // Close setup window
-            showGameBoard(); // Open main game board
+            stage.close(); // Close current window
+            showNameSelectionScreen(numPlayers); // Open name selection screen
         });
 
         // Display the setup scene
         stage.setScene(new Scene(root, 300, 200));
         stage.show();
+    }
+
+    /**
+     * This method creates and displays the player name selection screen.
+     * It allows players to enter custom names before starting the game.
+     * @param numPlayers The number of players selected in the previous screen
+     * @return This method does not return anything
+     */
+    private void showNameSelectionScreen(int numPlayers) {
+        // Create new stage for name selection
+        Stage nameStage = new Stage();
+        nameStage.setTitle("Enter Player Names");
+
+        // Main container for name selection interface
+        VBox mainBox = new VBox(15);
+        mainBox.setPadding(new Insets(20));
+        mainBox.setAlignment(Pos.CENTER);
+
+        // Header label
+        Label lblHeader = new Label("Enter Names for " + numPlayers + " Players:");
+        lblHeader.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        mainBox.getChildren().add(lblHeader);
+
+        // Array to store text fields for player names
+        TextField[] nameFields = new TextField[numPlayers];
+        
+        // Create text fields for each player
+        for (int i = 0; i < numPlayers; i++) {
+            Label lblPlayer = new Label("Player " + (i + 1) + " Name:");
+            TextField txtName = new TextField();
+            txtName.setPromptText("Enter name for Player " + (i + 1));
+            txtName.setText("Player " + (i + 1)); // Default name
+            nameFields[i] = txtName;
+            
+            mainBox.getChildren().addAll(lblPlayer, txtName);
+        }
+
+        // Start game button
+        Button btnStartGame = new Button("Start Game");
+        btnStartGame.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+        
+        // Event handler for start game button
+        btnStartGame.setOnAction(e -> {
+            // Collect player names from text fields
+            String[] playerNames = new String[numPlayers];
+            for (int i = 0; i < numPlayers; i++) {
+                String name = nameFields[i].getText().trim();
+                // Use default name if field is empty
+                playerNames[i] = name.isEmpty() ? "Player " + (i + 1) : name;
+            }
+            
+            // Create players with custom names
+            createPlayersWithNames(playerNames);
+            nameStage.close(); // Close name selection window
+            showGameBoard(); // Open main game board
+        });
+
+        mainBox.getChildren().add(btnStartGame);
+
+        // Display the name selection scene
+        Scene scene = new Scene(mainBox, 350, 300 + (numPlayers * 60));
+        nameStage.setScene(scene);
+        nameStage.show();
     }
 
     /**
@@ -205,6 +268,29 @@ public class Bank extends Application {
         // Create the specified number of players with starting cash and unique colors
         for (int i = 0; i < numPlayers; i++) {
             players.add(new Player("Player " + (i + 1), 1500, colors[i]));
+        }
+    }
+
+    /**
+     * This method creates players with custom names provided by the user.
+     * Each player is assigned a unique color and starts with $1500 in cash.
+     * @param playerNames Array of custom names for the players
+     * @return This method does not return anything
+     */
+    public static void createPlayersWithNames(String[] playerNames) {
+        players.clear(); // Remove any existing players from previous games
+        
+        // Array of distinct colors for player tokens
+        Color[] colors = {
+                Color.RED,    // Player 1 color
+                Color.BLUE,   // Player 2 color
+                Color.GREEN,  // Player 3 color
+                Color.ORANGE  // Player 4 color
+        };
+
+        // Create players with custom names, starting cash, and unique colors
+        for (int i = 0; i < playerNames.length; i++) {
+            players.add(new Player(playerNames[i], 1500, colors[i]));
         }
     }
 
@@ -634,7 +720,107 @@ public class Bank extends Application {
         
         // Check if only one player remains (game over condition)
         if (players.size() == 1) {
-            showAlert(Alert.AlertType.INFORMATION, "Game Over", players.get(0).getName() + " wins!");
+            celebrateWinner(players.get(0)); // Celebrate the winner with special effects
+        }
+    }
+
+    /**
+     * This method creates a celebration screen for the winning player with confetti effects and fanfare.
+     * It displays the winner's name, final statistics, and provides options to play again or exit.
+     * @param winner The player who won the game
+     * @return This method does not return anything
+     */
+    private void celebrateWinner(Player winner) {
+        // Create celebration stage
+        Stage celebrationStage = new Stage();
+        celebrationStage.setTitle("🎉 WINNER! 🎉");
+        
+        // Main container with celebration styling
+        VBox mainBox = new VBox(20);
+        mainBox.setPadding(new Insets(30));
+        mainBox.setAlignment(Pos.CENTER);
+        mainBox.setStyle("-fx-background-color: linear-gradient(to bottom, #FFD700, #FFA500); -fx-border-color: #FF6347; -fx-border-width: 5;");
+
+        // Winner announcement with large, bold text
+        Label lblWinner = new Label("🏆 " + winner.getName() + " WINS! 🏆");
+        lblWinner.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #8B0000; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 2, 2);");
+        
+        // Congratulations message
+        Label lblCongrats = new Label("Congratulations on your Monopoly victory!");
+        lblCongrats.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2F4F4F;");
+        
+        // Winner's final statistics
+        VBox statsBox = new VBox(10);
+        statsBox.setAlignment(Pos.CENTER);
+        statsBox.setStyle("-fx-background-color: rgba(255,255,255,0.8); -fx-padding: 15; -fx-border-radius: 10; -fx-background-radius: 10;");
+        
+        Label lblStatsHeader = new Label("Final Statistics:");
+        lblStatsHeader.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-underline: true;");
+        
+        Label lblFinalCash = new Label("Final Cash: $" + winner.getCash());
+        lblFinalCash.setStyle("-fx-font-size: 14px; -fx-text-fill: green; -fx-font-weight: bold;");
+        
+        Label lblProperties = new Label("Properties Owned: " + winner.getProperties().size());
+        lblProperties.setStyle("-fx-font-size: 14px;");
+        
+        // Calculate total asset value
+        int totalAssets = winner.getCash();
+        for (Property prop : winner.getProperties()) {
+            totalAssets += prop.getInherentValue();
+            if (prop instanceof Building) {
+                Building b = (Building) prop;
+                totalAssets += b.getHouses() * b.housePrice;
+            }
+        }
+        
+        Label lblTotalAssets = new Label("Total Assets: $" + totalAssets);
+        lblTotalAssets.setStyle("-fx-font-size: 16px; -fx-text-fill: #006400; -fx-font-weight: bold;");
+        
+        statsBox.getChildren().addAll(lblStatsHeader, lblFinalCash, lblProperties, lblTotalAssets);
+        
+        // Celebration emojis and effects
+        Label lblCelebration = new Label("🎊 🎉 🥳 🎈 🎆 🏆 🎆 🎈 🥳 🎉 🎊");
+        lblCelebration.setStyle("-fx-font-size: 24px;");
+        
+        // Action buttons
+        HBox buttonBox = new HBox(20);
+        buttonBox.setAlignment(Pos.CENTER);
+        
+        Button btnPlayAgain = new Button("🎮 Play Again");
+        btnPlayAgain.setStyle("-fx-font-size: 16px; -fx-padding: 10 20; -fx-background-color: #32CD32; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25;");
+        btnPlayAgain.setOnAction(e -> {
+            celebrationStage.close();
+            // Reset game and show setup screen
+            players.clear();
+            currentPlayerIndex = 0;
+            Stage newStage = new Stage();
+            start(newStage);
+        });
+        
+        Button btnExit = new Button("🚪 Exit Game");
+        btnExit.setStyle("-fx-font-size: 16px; -fx-padding: 10 20; -fx-background-color: #DC143C; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 25;");
+        btnExit.setOnAction(e -> {
+            celebrationStage.close();
+            System.exit(0); // Exit the application
+        });
+        
+        buttonBox.getChildren().addAll(btnPlayAgain, btnExit);
+        
+        // Add all elements to main container
+        mainBox.getChildren().addAll(lblWinner, lblCongrats, lblCelebration, statsBox, buttonBox);
+        
+        // Create and show celebration scene
+        Scene celebrationScene = new Scene(mainBox, 500, 600);
+        celebrationStage.setScene(celebrationScene);
+        celebrationStage.setResizable(false);
+        celebrationStage.show();
+        
+        // Play celebration sound effect (if available)
+        try {
+            // This would play a sound if you have audio files
+            // Toolkit.getDefaultToolkit().beep(); // Simple system beep
+        } catch (Exception e) {
+            // Ignore if sound fails
         }
     }
 
