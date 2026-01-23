@@ -30,7 +30,6 @@ public class Railroad extends Property {
 	 * This method does not expect a prompt.
 	 * @return Returns an integer representing the rent, doubling for each additional railroad owned.
 	 */
-	@Override
 	public int getFees() {
 		// If the railroad is mortgaged, no rent is collected
 		if (mortgaged) {

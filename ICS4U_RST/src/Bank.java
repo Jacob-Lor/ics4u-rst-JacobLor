@@ -760,20 +760,20 @@ public class Bank extends Application {
         VBox mainBox = new VBox(20);
         mainBox.setPadding(new Insets(30));
         mainBox.setAlignment(Pos.CENTER);
-        mainBox.setStyle("-fx-background-color: linear-gradient(to bottom, #FFD700, #FFA500); -fx-border-color: #FF6347; -fx-border-width: 5;");
+        mainBox.setStyle("-fx-background-color: white; -fx-border-color: #FF6347; -fx-border-width: 5;");
 
         // Winner announcement with large, bold text
         Label lblWinner = new Label("🏆 " + winner.getName() + " WINS! 🏆");
-        lblWinner.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #8B0000; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 10, 0.5, 2, 2);");
+        lblWinner.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #FFD700;");
         
         // Congratulations message
         Label lblCongrats = new Label("Congratulations on your Monopoly victory!");
-        lblCongrats.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2F4F4F;");
+        lblCongrats.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #FFD700;");
         
         // Winner's final statistics
         VBox statsBox = new VBox(10);
         statsBox.setAlignment(Pos.CENTER);
-        statsBox.setStyle("-fx-background-color: rgba(255,255,255,0.8); -fx-padding: 15; -fx-border-radius: 10; -fx-background-radius: 10;");
+        statsBox.setStyle("-fx-background-color: white; -fx-border-color: #1A1A1A; -fx-border-width: 3; -fx-border-radius: 8; -fx-background-radius: 8;");
         
         Label lblStatsHeader = new Label("Final Statistics:");
         lblStatsHeader.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-underline: true;");
@@ -798,10 +798,6 @@ public class Bank extends Application {
         lblTotalAssets.setStyle("-fx-font-size: 16px; -fx-text-fill: #006400; -fx-font-weight: bold;");
         
         statsBox.getChildren().addAll(lblStatsHeader, lblFinalCash, lblProperties, lblTotalAssets);
-        
-        // Celebration emojis and effects
-        Label lblCelebration = new Label("🎊 🎉 🥳 🎈 🎆 🏆 🎆 🎈 🥳 🎉 🎊");
-        lblCelebration.setStyle("-fx-font-size: 24px;");
         
         // Action buttons
         HBox buttonBox = new HBox(20);
@@ -828,7 +824,7 @@ public class Bank extends Application {
         buttonBox.getChildren().addAll(btnPlayAgain, btnExit);
         
         // Add all elements to main container
-        mainBox.getChildren().addAll(lblWinner, lblCongrats, lblCelebration, statsBox, buttonBox);
+        mainBox.getChildren().addAll(lblWinner, lblCongrats, statsBox, buttonBox);
         
         // Create and show celebration scene
         Scene celebrationScene = new Scene(mainBox, 500, 600);
@@ -1442,7 +1438,7 @@ public class Bank extends Application {
  /**
   * Scans all properties owned by the player and updates their monopoly status.
   * @param This method expects a player object.
-  * 
+  * @return It does not return anything
   */
  private void recalculateMonopolies(Player player) {
      // Reset all monopoly flags first
@@ -1458,9 +1454,15 @@ public class Bank extends Application {
          checkMonopoly(p, player);
      }
  }
+ /**
+  * This method prompts user to either pay off debt, or agree to bankrupt themselves.
+  * @param This method does not expect any input.
+  * @return It does not return anything
+  */
  private void bankruptcyUltimatum() {
      Player currentPlayer = players.get(currentPlayerIndex); // Get the active player
      
+     //Tells user to either pay off debt or bankrupt
      Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
      alert.setTitle("Debt");
      alert.setHeaderText(currentPlayer.getName() + ", you are in debt!");
@@ -1470,21 +1472,28 @@ public class Bank extends Application {
          "• Continue playing and raise cash\n" +
          "• Declare bankruptcy"
      );
-
+     
+     //Buttons offered to chose either or action.
      ButtonType btnContinue = new ButtonType("Raise Cash");
      ButtonType btnBankrupt = new ButtonType("Bankrupt");
 
      alert.getButtonTypes().setAll(btnContinue, btnBankrupt);
 
      Optional<ButtonType> result = alert.showAndWait();
-
+     
+     //Either brankrupts the player or shows them their current properties to choose if they want to bankrupt themselves.
      if (result.isPresent() && result.get() == btnBankrupt) {
          declareBankruptcy(currentPlayer);
      } else {
          showPlayerProperties(currentPlayer); // force asset liquidation UI
      }
  }
- 
+ /**
+  * This method resets all the datafields associated with a property object.
+  * @param This method expects a property as input.
+  * @return It does not return anything
+  * 
+  */
  private void resetProperty(Property property) {
 
 	    // Reset ownership

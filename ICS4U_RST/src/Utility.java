@@ -29,7 +29,6 @@ public class Utility extends Property {
 	 * This method does not expect a prompt, but references the static roll value from the Bank class.
 	 * @return Returns an integer representing the rent (4x roll for one utility, 10x roll for both).
 	 */
-	@Override
 	public int getFees() {
 		// If the utility is mortgaged, no rent is collected
 		if (mortgaged) {

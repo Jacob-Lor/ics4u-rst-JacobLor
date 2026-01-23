@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.ArrayList;
 
 public class Building extends Property {
-
+	
+	//Datafields
 	public ArrayList<Integer> rents;
 	protected int housePrice;
 	protected int hotelPrice;
@@ -98,8 +99,7 @@ public class Building extends Property {
 			numberOfHouses--;
 		}
 	}
-
-
+	
 	/**
 	 * This method is responsible for calculating the rent fee based on mortgage status, monopoly status, and house count.
 	 * @param prompt
@@ -141,11 +141,16 @@ public class Building extends Property {
 	 * This method does not expect a prompt.
 	 * @return Returns the full integer price of the house.
 	 */
-	//Allows houses to be sold
 	public int getHouseSellValue() {
 	    // Returns full house value (not half) as requested
 	    return housePrice;
 	}
+	
+	/**
+	 * This method is responsible for reseting the number of houses to zero.
+	 * @param prompt
+	 * This method does not expect a prompt.
+	 */
 	public void resetHouses() {
 		numberOfHouses = 0;
 	}

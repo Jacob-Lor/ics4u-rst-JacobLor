@@ -111,10 +111,22 @@ public abstract class Property {
 	 */
 	//Needed for all subclasses of the property, like Railroad, Building and Utility, yet implemented different. 
 	public abstract int getFees();
-	
+	/**
+	 * This method is for setting the owner of a property
+	 * @param prompt
+	 * This method expects an <code>Player<code> o representing the owner of the property.
+	 * @return This method does not return anything.
+	 */
 	public void setOwner(Player o) {
 		owner = o;
 	}
+	
+	/**
+	 * This method is for setting the state of purchase of a property
+	 * @param prompt
+	 * This method expects an <code>boolean<code> b representing if a property is purchased or not.
+	 * @return This method does not return anything.
+	 */
 	public void setPurchased(boolean b) {
 		purchased = b;
 	}
