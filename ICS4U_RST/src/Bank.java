@@ -1100,6 +1100,18 @@ public class Bank extends Application {
         window.close();
         // Adds a small delay before reopening to ensure the window is fully closed
         javafx.application.Platform.runLater(() -> showPlayerProperties(player));
+        
+        //After mortgaging a property, a player likely wants to buy something. This code checks if they can do so.
+        //Check if the tile is a purchasable property
+        int position = player.getPosition(); // Get player's current board position
+        Object tile = tiles[position]; // Get the tile object at that position
+        if (tile instanceof Property) {
+        	
+        	//If the property is purchaseable, check if the player can now afford and update the info box.
+            Property property = (Property) tile;
+            vbxPropertyInfoRef.getChildren().clear();
+            displayPropertyInfo(property, player); // Show property details and purchase options
+        }
     }
 
     /**
@@ -1154,6 +1166,19 @@ public class Bank extends Application {
             window.close();
             //This is a small delay to prevent instances from being instantiated twice.
             javafx.application.Platform.runLater(() -> showPlayerProperties(player));
+        }
+        //Most players sell stuff because they want to see if they can buy stuff. Check if the user can buy stuff afterwards
+        Player currentPlayer = players.get(currentPlayerIndex); // Get the active player
+        
+        // Check if the tile is a purchasable property
+        int position = player.getPosition(); // Get player's current board position
+        Object tile = tiles[position]; // Get the tile object at that position
+        if (tile instanceof Property) {
+        	
+        	//If the property is purchaseable, check if the player can now afford and update the info box.
+            Property property = (Property) tile;
+            vbxPropertyInfoRef.getChildren().clear();
+            displayPropertyInfo(property, player); // Show property details and purchase options
         }
     }
  /**
@@ -1271,8 +1296,8 @@ public class Bank extends Application {
 	        b.resetHouses();
 	    }
 	}
-
- 
-
 }
+
+
+
 
