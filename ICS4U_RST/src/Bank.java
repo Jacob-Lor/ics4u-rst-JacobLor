@@ -124,15 +124,27 @@ public class Bank extends Application {
 
         // Create player selection interface components
         Label lblPlayerSelector = new Label("Choose Number of Players");
-
+        
+        //Label Styling
+        lblPlayerSelector.setStyle("-fx-font-size: 22px; -fx-font-weight: 600; -fx-text-fill: #1a1a1a;");
+        
         // Spinner for selecting number of players (2-4 players supported)
         Spinner<Integer> spnPlayer = new Spinner<>();
         spnPlayer.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 4, 2)
         );
+        //Spinner Styling:
+        spnPlayer.setPrefWidth(120);
+        spnPlayer.setPrefHeight(45);
+        spnPlayer.setStyle("-fx-font-size: 16px; -fx-background-color: white; -fx-background-radius: 6; -fx-border-color: #bdc3c7; -fx-border-radius: 6; -fx-border-width: 1.5;");
 
         // Button to proceed to name selection
-        Button btnNext = new Button("Next: Enter Names");
+        Button btnNext = new Button("Next");
+        
+        //Button Width
+        btnNext.setPrefWidth(160);
+        btnNext.setStyle("-fx-background-color: #27ae60;-fx-text-fill: white; -fx-font-weight: bold;-fx-background-radius: 8; -fx-padding: 12 28;");
+
 
         // Layout container for setup screen
         VBox root = new VBox(15, lblPlayerSelector, spnPlayer, btnNext);
@@ -166,10 +178,14 @@ public class Bank extends Application {
         VBox mainBox = new VBox(15);
         mainBox.setPadding(new Insets(20));
         mainBox.setAlignment(Pos.CENTER);
+        
+        //Main Box FX styling
+        mainBox.setAlignment(Pos.CENTER);
+        mainBox.setStyle("-fx-background-color: #ffffff; -fx-border-color: #d5d8dc;-fx-border-radius: 12; -fx-border-width: 1;");
 
         // Header label
         Label lblHeader = new Label("Enter Names for " + numPlayers + " Players:");
-        lblHeader.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        lblHeader.setStyle("-fx-font-size: 24px; -fx-font-weight: 700; -fx-text-fill: #2980b9;");
         mainBox.getChildren().add(lblHeader);
 
         // Array to store text fields for player names
@@ -178,17 +194,22 @@ public class Bank extends Application {
         // Create text fields for each player
         for (int i = 0; i < numPlayers; i++) {
             Label lblPlayer = new Label("Player " + (i + 1) + " Name:");
+            lblPlayer.setStyle("-fx-font-weight: 600; -fx-font-size: 15px; -fx-text-fill: #34495e;");
             TextField txtName = new TextField();
             txtName.setPromptText("Enter name for Player " + (i + 1));
             txtName.setText("Player " + (i + 1)); // Default name
             nameFields[i] = txtName;
+            
+            //Textfield styling
+            txtName.setPrefWidth(200);
+            txtName.setStyle("-fx-background-color: white; -fx-background-radius: 6; -fx-border-color: #bdc3c7; -fx-border-radius: 6; -fx-border-width: 1.5; -fx-padding: 10; -fx-font-size: 14px;");
             
             mainBox.getChildren().addAll(lblPlayer, txtName);
         }
 
         // Start game button
         Button btnStartGame = new Button("Start Game");
-        btnStartGame.setStyle("-fx-font-size: 14px; -fx-padding: 10px;");
+        btnStartGame.setStyle("-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;-fx-background-radius: 25; -fx-padding: 14 40;");
         
         // Event handler for start game button
         btnStartGame.setOnAction(e -> {
