@@ -2,17 +2,10 @@
 
 Welcome ALL to my final rich summative task (RST) for computer science grade 12. 
 
-This project is a JavaFX implementation of the common board game monopoly. Here's how to play and how I made it:
+This project is a JavaFX implementation of the common board game mMonopoly. Here's how to play and how I made it:
 
-
-
-
-Thanks for accepting the RST Repository. This repository contains an Eclipse project for you to store ALL your files for your final project.
-
-Follow the instructions on the [course website](https://mrsspindler.github.io/ICS4UC_Notes/4U_HTML_Files/Unit%201/Activity%201%20Developer%20Tools%20Eclipse%20JavaFX%20GitHub.html#CloneImport) to clone this repository to your computer and import the project into Eclipse.
-
-You will need to repeat this process for EACH computer that you use for this course (eg: school and home!)
-
-Don't forget to ALWAYS start your coding sessions with a PULL and end with a PUSH - make sure everything gets pushed to the cloud!
-
-Happy coding!
+Supporting Documents:
+[Planning](https://github.com/Jacob-Lor/ics4u-rst-JacobLor/blob/main/RST_Documentation/ICS4U%20Unit%201%20Assignment_%20Evaluation%20-%20Jacob%20Lor.pdf)
+[Desgining](https://github.com/Jacob-Lor/ics4u-rst-JacobLor/blob/main/RST_Documentation/ICS4U%20RST%20Step%202%20Design%20-%20Jacob%20Lor%20(1).pdf)
+[Researching](https://github.com/Jacob-Lor/ics4u-rst-JacobLor/blob/main/RST_Documentation/ICS4U%20RST%20Step%203%20Implementation%20-%20Jacob%20Lor%20(1).pdf)
+[Testing](https://github.com/Jacob-Lor/ics4u-rst-JacobLor/blob/main/RST_Documentation/ICS4U%20RST%20Step%204%20Testing%20-%20Jacob%20Lor%20(1).pdf)
