@@ -11,7 +11,5 @@ Supporting Documents:
 [Testing](https://github.com/Jacob-Lor/ics4u-rst-JacobLor/blob/main/RST_Documentation/ICS4U%20RST%20Step%204%20Testing%20-%20Jacob%20Lor%20(1).pdf)
 
 ## Tutorial
-<br>
-
 ![Select # of Player's Pannel](https://github.com/Jacob-Lor/ics4u-rst-JacobLor/blob/main/Content/GameOpening.png)
-The game begins with a panel enabling users to choose up to 4 players. A spinner is used to prevent users from beginning a game with more than 4 or less than 2 players removing the need for error handling.
+The game begins with a panel enabling users to choose up to 4 players. A spinner is used to prevent users from beginning a game with more than 4 or less than 2 players, eliminating the need for error handling.
