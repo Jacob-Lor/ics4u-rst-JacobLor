@@ -15,4 +15,4 @@ Supporting Documents:
 <br>
 The game begins with a panel enabling users to choose up to 4 players. A spinner is used to prevent users from beginning a game with more than 4 or less than 2 players, eliminating the need for error handling.
 
-ReadMe in progress... Please come back by September 17. I lost video documentation to school acc.
+ReadMe in progress... Please come back by September 19. I lost video documentation to school acc.
